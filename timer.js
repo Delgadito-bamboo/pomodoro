@@ -1,11 +1,12 @@
 'use strict';
 
 class Timer{
-  constructor(status,duration,startButton,stopButton){
+  constructor(status,duration,startButton,stopButton,finishMusic){
     this.duration = duration;
     this.startButton = startButton;
     this.stopButton = stopButton;
     this.status = status;
+    this.finishMusic = finishMusic;
     this.isWorkTime = true;
     this.onTick = false;
 
@@ -50,10 +51,12 @@ class Timer{
     if(this.timeRemaining === 0){
       clearInterval(this.interval);
       if(this.isWorkTime){
+        this.finishMusic.play();
         this.isWorkTime = false;
         this.status.innerHTML = "Breaking Time";
         this.duration.innerHTML = `5 : 00`
       }else{
+        this.finishMusic.play();
         this.isWorkTime = true;
         this.status.innerHTML= "Work Time";
         this.duration.innerHTML = `25 : 00`
