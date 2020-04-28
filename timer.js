@@ -38,7 +38,7 @@ class Timer{
   tick = ()=>{
     if(this.timeRemaining > 0){
         this.timeRemaining = this.timeRemaining -1;
-        this.duration.innerHTML = `${Math.floor(this.timeRemaining / 60)} : ${this.timeRemaining % 60}` ;
+        this.duration.innerHTML = `${("0" + Math.floor(this.timeRemaining / 60)).slice(-2)} : ${("0" + this.timeRemaining % 60).slice(-2)}` ;
       }else{
         this.stop();
       }
@@ -54,7 +54,7 @@ class Timer{
         this.finishMusic.play();
         this.isWorkTime = false;
         this.status.innerHTML = "Breaking Time";
-        this.duration.innerHTML = `5 : 00`
+        this.duration.innerHTML = `05 : 00`
       }else{
         this.finishMusic.play();
         this.isWorkTime = true;
