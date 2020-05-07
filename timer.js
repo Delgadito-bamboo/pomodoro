@@ -2,10 +2,10 @@
 
 class Timer{
   constructor(status,duration,startButton,stopButton,finishMusic){
+    this.status = status;
     this.duration = duration;
     this.startButton = startButton;
     this.stopButton = stopButton;
-    this.status = status;
     this.finishMusic = finishMusic;
     this.isWorkTime = true;
     this.onTick = false;
@@ -16,33 +16,29 @@ class Timer{
 
     this.startButton.addEventListener('click', this.start);
     this.stopButton.addEventListener('click', this.stop);
-  }
+  };
 
   start= ()=>{
-    if(this.onTick){
-    }else{
-      if(this.isWorkTime && this.durationTime === 0){
-        this.durationTime = 10;
-        this.onTick = true;
-        this.interval = setInterval(this.tick,1000);
-      }else if(!this.isWorkTime && this.durationTime === 0){
-        this.durationTime = 5;
-        this.onTick = true;
-        this.interval = setInterval(this.tick,1000);
+      if(this.isWorkTime && this.timeRemaining === 0 && !this.onTick){
+        this.setStart(10);
+      }else if(!this.isWorkTime && this.timeRemaining === 0 && !this.ontick){
+        this.setStart(5);
       }else{
-        this.interval = setInterval(this.tick,1000);
-      }
-    }
-  }
-  
+      };
+    };
+
   tick = ()=>{
     if(this.timeRemaining > 0){
         this.timeRemaining = this.timeRemaining -1;
-        this.duration.innerHTML = `${("0" + Math.floor(this.timeRemaining / 60)).slice(-2)} : ${("0" + this.timeRemaining % 60).slice(-2)}` ;
+        this.duration.innerHTML = this.displayTime(this.timeRemaining) ;
       }else{
         this.stop();
       }
-    }
+    };
+
+  displayTime =(time) =>{
+    return ` ${("0" + Math.floor(time / 60)).slice(-2)} : ${("0" + time % 60).slice(-2)} `
+  };
 
 
   stop = ()=>{
@@ -51,28 +47,31 @@ class Timer{
     if(this.timeRemaining === 0){
       clearInterval(this.interval);
       if(this.isWorkTime){
-        this.finishMusic.play();
-        this.isWorkTime = false;
-        this.status.innerHTML = "Breaking Time";
-        this.duration.innerHTML = `05 : 00`
+        this.setStop("Break Time", `5 : 00`, true);
       }else{
-        this.finishMusic.play();
-        this.isWorkTime = true;
-        this.status.innerHTML= "Work Time";
-        this.duration.innerHTML = `25 : 00`
-      }
-    }else{
-      clearInterval(this.interval);
-    }
-
-
-  }
+        this.setStop("Work Time",`25 : 00`, false)
+      };
+    };
+  };
 
   get timeRemaining(){
     return  parseFloat(this.durationTime);
-  }
+  };
 
   set timeRemaining(time){
     this.durationTime = time;
-  }
-}
+  };
+
+  setStart = (setDuration) =>{
+      this.durationTime = setDuration;
+      this.onTick = true;
+      this.interval = setInterval(this.tick,1000);
+    };
+
+  setStop = (nextStatus, nextDuration,checkWorkTime)=>{
+    this.finishMusic.play();
+        this.isWorkTime = !checkWorkTime ;
+        this.status.innerHTML = nextStatus;
+        this.duration.innerHTML = nextDuration;
+  };
+};
